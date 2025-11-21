@@ -1,5 +1,5 @@
 use super::der::{EcParameters, SubjectPublicKeyInfo as Spki};
-pub(crate) use aws_nitro_enclaves_cose::crypto::SigningPublicKey;
+pub use aws_nitro_enclaves_cose::crypto::SigningPublicKey;
 use aws_nitro_enclaves_cose::crypto::{MessageDigest, SignatureAlgorithm};
 use aws_nitro_enclaves_cose::error::CoseError;
 use core::str::FromStr;

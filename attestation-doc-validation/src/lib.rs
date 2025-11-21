@@ -1,7 +1,7 @@
 pub mod attestation_doc;
 pub mod cert;
 pub mod error;
-mod nsm;
+pub mod nsm;
 mod time;
 
 pub use attestation_doc::{validate_expected_nonce, validate_expected_pcrs, PCRProvider};
@@ -61,7 +61,7 @@ pub fn validate_attestation_doc_in_cert(
 
     // Validate that the attestation doc's signature can be tied back to the AWS Nitro CA
     let intermediate_certs = create_intermediate_cert_stack(&decoded_attestation_doc.cabundle);
-    cert::validate_cert_trust_chain(&decoded_attestation_doc.certificate, &intermediate_certs)?;
+    cert::validate_cert_trust_chain(&decoded_attestation_doc.certificate, &intermediate_certs, None)?;
 
     // Validate Cose signature over attestation doc
     let cert = cert::parse_der_cert(&decoded_attestation_doc.certificate)?;
@@ -108,7 +108,7 @@ pub fn validate_attestation_doc_against_cert(
 
     // Validate that the attestation doc's signature can be tied back to the AWS Nitro CA
     let intermediate_certs = create_intermediate_cert_stack(&decoded_attestation_doc.cabundle);
-    cert::validate_cert_trust_chain(&decoded_attestation_doc.certificate, &intermediate_certs)?;
+    cert::validate_cert_trust_chain(&decoded_attestation_doc.certificate, &intermediate_certs, None)?;
 
     // Validate Cose signature over attestation doc
     let pub_key: nsm::PublicKey = attestation_doc_signing_cert.public_key().try_into()?;
@@ -152,7 +152,7 @@ pub fn validate_attestation_doc(
 
     // Validate that the attestation doc's signature can be tied back to the AWS Nitro CA
     let intermediate_certs = create_intermediate_cert_stack(&decoded_attestation_doc.cabundle);
-    cert::validate_cert_trust_chain(&decoded_attestation_doc.certificate, &intermediate_certs)?;
+    cert::validate_cert_trust_chain(&decoded_attestation_doc.certificate, &intermediate_certs, None)?;
 
     // Validate Cose signature over attestation doc
     let pub_key: nsm::PublicKey = attestation_doc_signing_cert.public_key().try_into()?;
@@ -185,7 +185,7 @@ pub fn validate_and_parse_attestation_doc(
 
     // Validate that the attestation doc's signature can be tied back to the AWS Nitro CA
     let intermediate_certs = create_intermediate_cert_stack(&decoded_attestation_doc.cabundle);
-    cert::validate_cert_trust_chain(&decoded_attestation_doc.certificate, &intermediate_certs)?;
+    cert::validate_cert_trust_chain(&decoded_attestation_doc.certificate, &intermediate_certs, None)?;
 
     // Validate Cose signature over attestation doc
     let pub_key: nsm::PublicKey = attestation_doc_signing_cert.public_key().try_into()?;

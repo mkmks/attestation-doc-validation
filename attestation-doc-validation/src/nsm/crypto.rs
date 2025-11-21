@@ -1,4 +1,4 @@
-pub(crate) use aws_nitro_enclaves_cose::crypto::Hash;
+pub use aws_nitro_enclaves_cose::crypto::Hash;
 use aws_nitro_enclaves_cose::crypto::{
     Decryption, Encryption, EncryptionAlgorithm, Entropy, MessageDigest,
 };
@@ -16,7 +16,7 @@ use sha2::{Digest, Sha256, Sha384, Sha512};
 type Aes192Gcm = AesGcm<Aes192, U12>;
 
 /// Type that implements various cryptographic traits
-pub(crate) struct CryptoClient;
+pub struct CryptoClient;
 
 impl Entropy for CryptoClient {
     fn rand_bytes(buff: &mut [u8]) -> Result<(), CoseError> {

@@ -107,7 +107,7 @@ fn get_epoch() -> CertResult<u64> {
 ///
 /// Returns a `CertError::UntrustedCert` when the trust chain fails to validate
 /// Returns a `CertError::Openssl` if an error occurred while preparing the context
-pub fn validate_cert_trust_chain(target: &[u8], intermediates: &[&[u8]]) -> CertResult<()> {
+pub fn validate_cert_trust_chain(target: &[u8], intermediates: &[&[u8]], now: Option<u64>) -> CertResult<()> {
     let end_entity_cert = EndEntityCert::try_from(target).map_err(|_| CertError::DecodeError)?;
 
     let (_, nitro_pem_cert) = x509_parser::pem::parse_x509_pem(NITRO_ROOT_CA_BYTES)
@@ -116,7 +116,10 @@ pub fn validate_cert_trust_chain(target: &[u8], intermediates: &[&[u8]]) -> Cert
         .map_err(|_| CertError::DecodeError)?];
     let server_trust_anchors = webpki::TlsServerTrustAnchors(&nitro_trust_anchor);
 
-    let now = get_epoch()?;
+    let now = match now {
+        Some(now) => now,
+        None => get_epoch()?
+    };
     let time = webpki::Time::from_seconds_since_unix_epoch(now);
 
     end_entity_cert.verify_is_valid_tls_server_cert(

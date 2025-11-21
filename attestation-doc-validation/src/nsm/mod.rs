@@ -2,6 +2,6 @@ mod crypto;
 mod der;
 mod pkey;
 
-pub(super) use crypto::{CryptoClient, Hash};
-pub(super) use pkey::{PublicKey, SigningPublicKey};
+pub use crypto::{CryptoClient, Hash};
+pub use pkey::{PublicKey, SigningPublicKey};
 pub(super) mod error;
